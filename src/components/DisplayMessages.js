@@ -1,4 +1,9 @@
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import ListGroup from 'react-bootstrap/ListGroup';
 import React from 'react';
+import Row from 'react-bootstrap/Row';
 
 export class DisplayMessages extends React.Component {
     constructor(props) {
@@ -15,9 +20,10 @@ export class DisplayMessages extends React.Component {
         input: event.target.value
       });
     }
-    submitMessage() {  
+    submitMessage(event) {  
       this.setState((state) => {
         const currentMessage = state.input;
+        event.preventDefault(); 
         return {
           input: '',
           messages: state.messages.concat(currentMessage)
@@ -27,19 +33,36 @@ export class DisplayMessages extends React.Component {
     render() {
       return (
         <div>
-          <h2>Type in a new Message:</h2>
-          <input
+          <h2>Enter text to add to list:</h2>
+          <Form onSubmit={this.submitMessage}>
+          <Row>
+            <Col sm={8}>
+          <Form.Control type="input"
             value={this.state.input}
-            onChange={this.handleChange}/><br/>
-          <button onClick={this.submitMessage}>Submit</button>
-          <ul>
+            onChange={this.handleChange}
+        /><br/>
+            </Col>
+            <Col sm={4}>
+          <Button variant="primary" type="submit" onKeyPress={event => {
+              if (event.key === "Enter") {
+                this.submitMessage();
+              }
+            }}>Submit</Button>
+          </Col>
+          </Row>
+          </Form>
+          <Row>
+          <Col sm={8}>
+          <ListGroup as="ul">
             {this.state.messages.map( (message, idx) => {
                 return (
-                   <li key={idx}>{message}</li>
+                   <ListGroup.Item as="li" key={idx}>{message}</ListGroup.Item>
                 )
               })
             }
-          </ul>
+          </ListGroup>
+          </Col>
+          </Row>
         </div>
       );
     }

@@ -13,4 +13,5 @@ const messageReducer = (state = [], action) => {
     }
   };
 
-export const store = createStore(messageReducer);
+const store = createStore(messageReducer);
+export default store;
